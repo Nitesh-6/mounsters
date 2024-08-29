@@ -1,18 +1,28 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import "./App.css";
 import CardList from "./components/card-list/card-list.component";
 import SecrchBox from "./components/search-box/search-box.component";
-import axios from "axios";
+import { getData } from "./utils/data.utils";
+
+export type Mounster = {
+  id: number;
+  name: string;
+  email: string;
+};
 
 function App() {
-  const [mounsters, setMounsters] = useState([]);
+  const [mounsters, setMounsters] = useState<Mounster[]>([]);
   const [filteredMounsters, setfilteredMounsters] = useState(mounsters);
   const [searchString, setSearchString] = useState("");
 
   useEffect(() => {
-    axios
-      .get("https://jsonplaceholder.typicode.com/users")
-      .then((res) => setMounsters(res.data));
+    const fetchUsers = async () => {
+      const users = await getData<Mounster[]>(
+        "https://jsonplaceholder.typicode.com/users"
+      );
+      setMounsters(users);
+    };
+    fetchUsers();
   }, []);
 
   useEffect(() => {
@@ -22,9 +32,9 @@ function App() {
     setfilteredMounsters(dummyMounsters1);
   }, [mounsters, searchString]);
 
-  function handleMounsters(event) {
-    setSearchString(event.target.value);
-  }
+  const handleMounsters = (event: ChangeEvent<HTMLInputElement>): void => {
+    setSearchString(event.target.value.toLowerCase());
+  };
 
   return (
     <div className="App">

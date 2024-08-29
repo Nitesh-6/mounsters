@@ -1,6 +1,11 @@
 import "./card.styles.css";
+import { Mounster } from "../../App";
 
-function Card({ mounsters }) {
+type cardProps = {
+  mounsters: Mounster;
+};
+
+const Card = ({ mounsters }: cardProps) => {
   const { name, id, email } = mounsters;
   return (
     <div>
@@ -14,5 +19,5 @@ function Card({ mounsters }) {
       </div>
     </div>
   );
-}
+};
 export default Card;
